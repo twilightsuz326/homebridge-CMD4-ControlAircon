@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import sys
+import os
 import json
 import IRPost
 import urllib.request
@@ -10,22 +11,26 @@ logpath = "logtemp.json"
 
 class IR:
     def __init__(self):
-        self.Active = 0
-        self.CurrentHeaterCoolerState = 1
-        self.TargetHeaterCoolerState = 0
+        self.Active = 1
+        self.CurrentHeaterCoolerState = 2
+        self.TargetHeaterCoolerState = 2
         self.CurrentTemperature = 20.0
         self.LockPhysicalControls = 0
         self.SwingMode = 0
-        self.CoolingThresholdTemperature = 28.0
-        self.HeatingThresholdTemperature = 28.0
+        self.CoolingThresholdTemperature = 17.0
+        self.HeatingThresholdTemperature = 17.0
         self.TemperatureDisplayUnits = 0
-        self.RotationSpeed = 1
+        self.RotationSpeed = 80
     
     def readjson(self):
-        f = open(logpath, "r")
-        tempdic = json.load(f)
-        for key, val in tempdic.items():
-            setattr(self, key, val)
+        if os.path.exists(logpath):
+            f = open(logpath, "r")
+            tempdic = json.load(f)
+            for key, val in tempdic.items():
+                setattr(self, key, val)
+            f.close()
+        else:
+            self.writejson()
         return self
 
     def writejson(self):
@@ -44,7 +49,11 @@ class IR:
         return self.__dict__[input]
 
     def setvalue(self, input, val):
-        setattr(self, input, val)
+        if val.isdecimal():
+            setattr(self, input, int(val))
+        else:
+            setattr(self, input, float(val))
+
         # スイングだけ別行動
         if (input == "SwingMode"):
             IRPost.setval(self, posthex="f20d01fe21042")
