@@ -1,0 +1,12 @@
+{
+    "Active": "1",
+    "CurrentHeaterCoolerState": 1,
+    "TargetHeaterCoolerState": 0,
+    "CurrentTemperature": 20.0,
+    "LockPhysicalControls": 0,
+    "SwingMode": "1",
+    "CoolingThresholdTemperature": 28.0,
+    "HeatingThresholdTemperature": 28.0,
+    "TemperatureDisplayUnits": 0,
+    "RotationSpeed": 20
+}
