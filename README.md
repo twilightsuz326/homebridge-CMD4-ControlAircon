@@ -1,10 +1,11 @@
 # homebridge-CMD4-ControlAircon
 
-homebridge-CMD4 を使ってIRKit経由で冷暖房の操作をするプログラムです。  
+homebridge-CMD4 を使ってIRKit経由で冷暖房の操作をするソースです。
   
 使用プラグイン: HeaterCooler  
 対象エアコン: TOSHIBA RAS-3614D  
 
+## Config
 ```
         {
             "platform":                       "Cmd4",
