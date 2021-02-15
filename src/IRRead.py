@@ -1,7 +1,10 @@
 import json
 import argparse
 
-## 読み込んだIRを2進数・16進数に変換
+# IRRead.py 
+# https://qiita.com/gorohash/items/598d69a63bd6b4308291
+# 赤外線の信号をデコード。 IRを2進数出力するコードを追加しただけ。
+
 # 実行:
 # python -f ir.json ac:cool27
 
@@ -21,7 +24,7 @@ for arg in args.id:
     t = 0.0
     data = []
     for i in range(0, len(code) - 1, 2):
-      if t * 7.0 < code[i]:  # 開始コード. なぜ7？
+      if t * 7.0 < code[i]:  # 開始コード. 8T以上の時に新枠
         t = (code[i] + code[i + 1]) / 16.0  # 1Tを求める 16Tへ
         data.append("")
       elif code[i + 1] < t * 2.0:  # 奇数バイトが 1Tの場合は0

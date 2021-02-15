@@ -1,15 +1,16 @@
 # coding: utf-8
 
+#
+# homebridge-CMD4-ControlAirCon
+# Author: TwilightSuz326
+#
+# IRPost.py
+#  -> IRKitへのIR送信クラス(受信も書けばよかった?)
+#
+
 from IRMake import makeIR
 import urllib.request
 import json
-from pprint import pprint
-
-##  IR ms
-##  Start: 8500
-##  0: 1000 1000
-##  1: 1000 3200
-
 
 def setval(postdic, posthex=""):
     irmake = makeIR(postdic)
@@ -19,7 +20,11 @@ def setval(postdic, posthex=""):
 
     binir = irmake.startmake()  # [8500,8500,1000…]
     binir_str = ",".join(map(str, binir)) # "8500,8500,1000…"
-    print(binir_str)
+
+    # DEBUG
+    # print(irmake.posthex)
+    # print(binir_str)
+
     postIRKit(binir_str)
 
     # 送信
@@ -39,7 +44,8 @@ def postIRKit(postbin):
     request = urllib.request.Request(url, data=json_data, method=method, headers=headers)
     with urllib.request.urlopen(request) as response:
         response_body = response.read().decode("utf-8")
-        print(response_body)
+        # Response
+        # print(response_body)
 
 
 

@@ -1,5 +1,13 @@
 # coding: utf-8
 
+#
+# homebridge-CMD4-ControlAirCon
+# Author: TwilightSuz326
+#
+# IRHeetCool.py
+#  -> CMD4からのパラメーターの送受信 メインクラス
+#
+
 import sys
 import os
 import json
@@ -12,15 +20,15 @@ logpath = "logtemp.json"
 class IR:
     def __init__(self):
         self.Active = 1
-        self.CurrentHeaterCoolerState = 2
-        self.TargetHeaterCoolerState = 2
+        self.CurrentHeaterCoolerState = 1
+        self.TargetHeaterCoolerState = 0
         self.CurrentTemperature = 20.0
         self.LockPhysicalControls = 0
         self.SwingMode = 0
         self.CoolingThresholdTemperature = 17.0
-        self.HeatingThresholdTemperature = 17.0
+        self.HeatingThresholdTemperature = 21.0
         self.TemperatureDisplayUnits = 0
-        self.RotationSpeed = 80
+        self.RotationSpeed = 100
     
     def readjson(self):
         if os.path.exists(logpath):
@@ -38,6 +46,7 @@ class IR:
         f.write(json.dumps(self.__dict__, ensure_ascii=False, indent=4))
         f.close()
 
+    # 温度取得は別で実装 & JSON取得
     def gettemp(self):
         url = 'http://192.168.3.53:3333'
         response = urllib.request.urlopen(url)
@@ -50,17 +59,35 @@ class IR:
 
     def setvalue(self, input, val):
         if val.isdecimal():
-            setattr(self, input, int(val))
+            multival = int(val)
         else:
-            setattr(self, input, float(val))
+            multival = float(val)
 
         # スイングだけ別行動
         if (input == "SwingMode"):
             IRPost.setval(self, posthex="f20d01fe21042")
-        else:
-            IRPost.setval(self)
+        # 使用していないパラメーターのためスルー
+        if (input == "TargetHeaterCoolerState"):
+            return multival
+        # 電源OFF時に風量リセット
+        if self.Active == 0:
+            self.RotationSpeed = 100
+        # 自動運転の風量を固定
+        if self.TargetHeaterCoolerState == 0:
+            if input == "RotationSpeed":
+                multival = 100
+            self.RotationSpeed = 100
+        
+        # IRKit 帯域節約のため 既に設定済みの値はスルー
+        if getattr(self, input) == multival:
+            return multival
+        setattr(self, input, multival)
+
+        # Send IR
+        IRPost.setval(self)
+            
         self.writejson()
-        return val
+        return multival
         
 
 if __name__ == "__main__":
