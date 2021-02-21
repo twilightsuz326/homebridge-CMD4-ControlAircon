@@ -4,7 +4,27 @@ homebridge-CMD4 を使ってIRKit経由で冷暖房の操作をするソース�
   
 使用プラグイン: HeaterCooler  
 対象エアコン: TOSHIBA RAS-3614D  
+  
+公式パッケージのソースを編集。(未編集だと次項のConfigのpropsが反映されない)  
+## Homebridge-CMD4 Cmd4Accessory.js Edit
+```
+             if ( props )
+             {
+                accessory.log.debug( "Overriding characteristic %s props for: %s ", CMD4_ACC_TYPE_ENUM.properties[ accTypeEnumIndex ].type, this.displayName );
+                  accessory.service.getCharacteristic( CMD4_ACC_TYPE_ENUM.properties[ accTypeEnumIndex ].
+                         characteristic )
+                  .setProps(
+                  //{
+                    // minValue: 18,
+                    // maxValue: 30,
+                    // minStep: 1
+                    props
+                //}
+                  );
+             }
+```
 
+propsの記述フォーマット方法が公式Wikiに記載がないため自信ないけど動いてる。
 ## Config
 ```
         {

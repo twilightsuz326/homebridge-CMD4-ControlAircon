@@ -19,6 +19,7 @@ logpath = "logtemp.json"
 
 class IR:
     def __init__(self):
+        self.Name = "HeaterCooler"
         self.Active = 1
         self.CurrentHeaterCoolerState = 1
         self.TargetHeaterCoolerState = 0
