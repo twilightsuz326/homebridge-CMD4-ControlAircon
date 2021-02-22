@@ -12,10 +12,13 @@ import sys
 import os
 import json
 import IRPost
+import IRMake
 import urllib.request
 
-#logpath = "/home/mitulu/py/logtemp.json"
-logpath = "logtemp.json"
+if os.name == "nt":
+    logpath = "logtemp.json"
+else:
+    logpath = "/home/mitulu/py/logtemp.json"
 
 class IR:
     def __init__(self):
@@ -30,7 +33,7 @@ class IR:
         self.HeatingThresholdTemperature = 21.0
         self.TemperatureDisplayUnits = 0
         self.RotationSpeed = 100
-    
+
     def readjson(self):
         if os.path.exists(logpath):
             f = open(logpath, "r")
@@ -66,7 +69,7 @@ class IR:
 
         # スイングだけ別行動
         if (input == "SwingMode"):
-            IRPost.setval(self, posthex="f20d01fe21042")
+            self.execIR("f20d01fe21042")
         # 使用していないパラメーターのためスルー
         if (input == "TargetHeaterCoolerState"):
             return multival
@@ -78,18 +81,27 @@ class IR:
             if input == "RotationSpeed":
                 multival = 100
             self.RotationSpeed = 100
-        
+
         # IRKit 帯域節約のため 既に設定済みの値はスルー
         if getattr(self, input) == multival:
+            # print("SKIP")
             return multival
         setattr(self, input, multival)
 
         # Send IR
-        IRPost.setval(self)
-            
-        self.writejson()
+        self.execIR(self)
+
         return multival
-        
+
+    def execIR(self, posthex=""):
+        irmake = IRMake.makeIR(self, posthex)
+
+        binir = irmake.startmake()  # [8500,8500,1000…]
+        binir_str = ",".join(map(str, binir)) # "8500,8500,1000…"
+        IRPost.postIRKit(binir_str)
+
+        self.writejson()
+
 
 if __name__ == "__main__":
     main = IR()
@@ -100,4 +112,4 @@ if __name__ == "__main__":
         print(main.getvalue(sys.argv[3]))
     if sys.argv[1] == "Set":
         print(main.setvalue(sys.argv[3], sys.argv[4]))
-    
+

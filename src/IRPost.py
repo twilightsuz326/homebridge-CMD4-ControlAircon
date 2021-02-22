@@ -5,15 +5,15 @@
 # Author: TwilightSuz326
 #
 # IRPost.py
-#  -> IRKitへのIR送信クラス(受信も書けばよかった?)
+#  -> (汎用) IRKitへのIR送信クラス(受信も書けばよかった?)
 #
 
-from IRMake import makeIR
+import IRMake
 import urllib.request
 import json
 
 def setval(postdic, posthex=""):
-    irmake = makeIR(postdic)
+    irmake = IRMake.makeIR(postdic)
 
     # スイング用hex
     irmake.posthex = posthex
@@ -23,7 +23,7 @@ def setval(postdic, posthex=""):
 
     # DEBUG
     # print(irmake.posthex)
-    # print(binir_str)
+    print(binir_str)
 
     postIRKit(binir_str)
 

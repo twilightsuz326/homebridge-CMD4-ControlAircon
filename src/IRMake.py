@@ -14,11 +14,12 @@
 #
 
 import IRHeetCool
+import makeBinIR
 
 class makeIR:
-    def __init__(self, postdic):
+    def __init__(self, postdic, posthex=""):
         self.posthex = ""  # "f20d03fc0100c78046"
-        self.bindate = []  # ["1111", "0010", "0000", "1101"…]
+        self.bindata = []  # ["1111", "0010", "0000", "1101"…]
         self.binir = []  # [8500,8500,1000…]
         self.postdic = postdic
 
@@ -26,8 +27,9 @@ class makeIR:
         if (self.posthex == ""):
             self.makehex()
         
-        self.makebindate()
-        self.makeBinIR()
+        self.bindata = makeBinIR.convHextoBin(self.posthex)
+        # bintoIR(repeat, bincode, startcode, ontime, offtime, fincode):
+        self.binir = makeBinIR.convBintoIR(2, self.bindata, [8500, 8500], 1000, 3200, [1000,10400])
         return self.binir
 
     def makehex(self):
@@ -83,32 +85,15 @@ class makeIR:
         self.posthex += format(int(check2,2), "x")
 
 
+    # 10進数から16進数の値へ
     def transhex(self, val):
         return str( format(int(val), "0x") )
 
-    def makebindate(self):
-        hexlist = list(self.posthex)
-        for val in hexlist:
-            self.bindate.append(format(int(val,16), "04b"))
-        return
-
-    def makeBinIR(self):
-        for k in range(2):
-            for i in range(2):
-                self.binir.append(8500)
-            for i in self.bindate:
-                for n in list(i):
-                    if(n == "0"):
-                        self.binir.append(1000)
-                        self.binir.append(1000)
-                    if(n == "1"):
-                        self.binir.append(1000)
-                        self.binir.append(3200)
-            self.binir.append(1000)
-            self.binir.append(10400)
             
 if __name__ == "__main__":
     b = IRHeetCool.IR()
     a = makeIR(b)
     a.makehex()
-    print(a.posthex)
+    a.bindata = makeBinIR.convHextoBin(a.posthex)
+    a.binir = makeBinIR.convBintoIR(2, a.bindata, [8500, 8500], 1000, 3200, [1000,10400])
+    print(a.binir)
