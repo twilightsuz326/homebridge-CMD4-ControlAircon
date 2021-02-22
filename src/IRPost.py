@@ -12,24 +12,6 @@ import IRMake
 import urllib.request
 import json
 
-def setval(postdic, posthex=""):
-    irmake = IRMake.makeIR(postdic)
-
-    # スイング用hex
-    irmake.posthex = posthex
-
-    binir = irmake.startmake()  # [8500,8500,1000…]
-    binir_str = ",".join(map(str, binir)) # "8500,8500,1000…"
-
-    # DEBUG
-    # print(irmake.posthex)
-    print(binir_str)
-
-    postIRKit(binir_str)
-
-    # 送信
-    return
-
 
 def postIRKit(postbin):
     url = "http://192.168.3.31/messages" 

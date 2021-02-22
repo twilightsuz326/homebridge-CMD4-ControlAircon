@@ -18,7 +18,7 @@ import makeBinIR
 
 class makeIR:
     def __init__(self, postdic, posthex=""):
-        self.posthex = ""  # "f20d03fc0100c78046"
+        self.posthex = posthex  # "f20d03fc0100c78046"
         self.bindata = []  # ["1111", "0010", "0000", "1101"…]
         self.binir = []  # [8500,8500,1000…]
         self.postdic = postdic
@@ -96,4 +96,4 @@ if __name__ == "__main__":
     a.makehex()
     a.bindata = makeBinIR.convHextoBin(a.posthex)
     a.binir = makeBinIR.convBintoIR(2, a.bindata, [8500, 8500], 1000, 3200, [1000,10400])
-    print(a.binir)
+    # print(a.binir)

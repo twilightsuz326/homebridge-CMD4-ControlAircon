@@ -69,7 +69,8 @@ class IR:
 
         # スイングだけ別行動
         if (input == "SwingMode"):
-            self.execIR("f20d01fe21042")
+            self.execIR(posthex="f20d01fe21042")
+            return multival
         # 使用していないパラメーターのためスルー
         if (input == "TargetHeaterCoolerState"):
             return multival
@@ -89,12 +90,12 @@ class IR:
         setattr(self, input, multival)
 
         # Send IR
-        self.execIR(self)
+        self.execIR()
 
         return multival
 
     def execIR(self, posthex=""):
-        irmake = IRMake.makeIR(self, posthex)
+        irmake = IRMake.makeIR(self, posthex=posthex)
 
         binir = irmake.startmake()  # [8500,8500,1000…]
         binir_str = ",".join(map(str, binir)) # "8500,8500,1000…"
