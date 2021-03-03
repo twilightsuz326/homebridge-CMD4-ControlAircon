@@ -13,7 +13,6 @@
 #  End: 10400
 #
 
-import IRHeetCool
 import makeBinIR
 
 class makeIR:
@@ -88,12 +87,3 @@ class makeIR:
     # 10進数から16進数の値へ
     def transhex(self, val):
         return str( format(int(val), "0x") )
-
-            
-if __name__ == "__main__":
-    b = IRHeetCool.IR()
-    a = makeIR(b)
-    a.makehex()
-    a.bindata = makeBinIR.convHextoBin(a.posthex)
-    a.binir = makeBinIR.convBintoIR(2, a.bindata, [8500, 8500], 1000, 3200, [1000,10400])
-    # print(a.binir)

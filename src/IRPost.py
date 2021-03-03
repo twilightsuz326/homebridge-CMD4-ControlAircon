@@ -29,7 +29,9 @@ def postIRKit(postbin):
         # Response
         # print(response_body)
 
-
+def getData(url):
+    with urllib.request.urlopen(url) as response:
+        return response.read()
 
 if __name__ == "__main__" :
     postIRKit("8450,8450")
