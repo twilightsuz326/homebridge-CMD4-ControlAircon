@@ -33,3 +33,8 @@ def convBintoIR(repeat, bincode, startcode, ontime, offtime, fincode):
         for i in fincode:
             binir.append(i) #1000 10400
     return binir
+
+if __name__ == "__main__":
+    hex = convHextoBin("f20d03fc0190018012")
+    print(convBintoIR( 2, hex, [8500, 8500], 1000, 3200, [1000,10400]))
+    

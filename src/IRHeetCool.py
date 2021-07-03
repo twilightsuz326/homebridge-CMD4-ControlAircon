@@ -71,9 +71,6 @@ class IR:
         if (input == "SwingMode"):
             self.execIR(posthex="f20d01fe21042")
             return multival
-        # 使用していないパラメーターのためスルー
-        if (input == "TargetHeaterCoolerState"):
-            return multival
         # 電源OFF時に風量リセット
         if self.Active == 0:
             self.RotationSpeed = 100
@@ -82,11 +79,12 @@ class IR:
             if input == "RotationSpeed":
                 multival = 100
             self.RotationSpeed = 100
-
+        
         # IRKit 帯域節約のため 既に設定済みの値はスルー
         if getattr(self, input) == multival:
             # print("SKIP")
             return multival
+        
         setattr(self, input, multival)
 
         # Send IR

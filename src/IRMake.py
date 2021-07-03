@@ -74,14 +74,19 @@ class makeIR:
         check1 = str(format(check1, "04b"))[-4:]
         self.posthex += format(int(check1, 2), "x")
 
-        # (後半: 14バイト - 10バイト ※14B < 10Bの場合は総和) 
-        if(int(self.posthex[13], 16) > int(self.posthex[9], 16)):
-            check2 = int(self.posthex[13], 16) - int(self.posthex[9])
+        # X NG X (後半: 14バイト - 10バイト ※14B < 10Bの場合は総和) 
+        # 電源OFF: 6, 冷房: 0, 自動: 1, 暖房: 2 (たぶん)
+        if(self.postdic.Active == 1):
+            if(self.postdic.TargetHeaterCoolerState == 0):
+                check2 = 1
+            elif(self.postdic.TargetHeaterCoolerState == 2):
+                check2 = 0
+            elif(self.postdic.TargetHeaterCoolerState == 1):
+                check2 = 2
         else:
-            check2 = int(self.posthex[13], 16) + int(self.posthex[9])
+            check2 = 6
         
-        check2 = str(format(check2, "04b"))[-4:]
-        self.posthex += format(int(check2,2), "x")
+        self.posthex += str(check2)
 
 
     # 10進数から16進数の値へ

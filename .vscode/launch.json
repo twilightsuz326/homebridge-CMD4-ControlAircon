@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "${file}",
             "console": "integratedTerminal",
-            "args": ["Set", "A", "Active", "0"]
+            "args": ["Set", "A", "Active", "1"]
             //"args": ["-f", "ir.json", "ac:cool27"]
         }
     ]
